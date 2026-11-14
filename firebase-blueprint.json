@@ -1,0 +1,246 @@
+{
+  "entities": {
+    "UserWorkspaceLink": {
+      "title": "UserWorkspaceLink",
+      "description": "Maps an authenticated Google user to their active 2m Store workspace.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "activeStoreId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "createdAt", "updatedAt"]
+    },
+    "StoreInvite": {
+      "title": "StoreInvite",
+      "description": "Lookup document mapping a 6-character store join code to a storeId.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "storeName", "ownerUid", "createdAt"]
+    },
+    "StoreWorkspace": {
+      "title": "StoreWorkspace",
+      "description": "Shared 2m Store workspace connecting up to 4 staff devices.",
+      "type": "object",
+      "properties": {
+        "storeName": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "joinCode": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeName", "ownerUid", "joinCode", "memberUids", "createdAt", "updatedAt"]
+    },
+    "StaffMember": {
+      "title": "StaffMember",
+      "description": "Staff profile (Owner Admin or 3 Staff accounts) with salted PIN hash.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["ADMIN", "STAFF"] },
+        "pinHash": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "slotIndex": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "name", "role", "pinHash", "isActive", "slotIndex", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Saved POS catalog item with wholesale cost, retail price, and live stock quantity.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "sellingPriceEgp": { "type": "number" },
+        "costPriceEgp": { "type": "number" },
+        "stockQty": { "type": "integer" },
+        "lowStockThreshold": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "name", "category", "sellingPriceEgp", "costPriceEgp", "stockQty", "lowStockThreshold", "createdAt", "updatedAt"]
+    },
+    "SaleTransaction": {
+      "title": "SaleTransaction",
+      "description": "POS sale transaction with line items, revenue, cost, net profit, and staff attribution.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "invoiceNumber": { "type": "string" },
+        "itemsSummary": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmountEgp": { "type": "number" },
+        "totalCostEgp": { "type": "number" },
+        "netProfitEgp": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["CASH", "TRANSFER", "CREDIT"] },
+        "paidAmountEgp": { "type": "number" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "staffId": { "type": "string" },
+        "staffName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "invoiceNumber", "itemsSummary", "items", "totalAmountEgp", "totalCostEgp", "netProfitEgp", "paymentMethod", "paidAmountEgp", "customerName", "customerPhone", "staffId", "staffName", "createdAt"]
+    },
+    "RepairTicket": {
+      "title": "RepairTicket",
+      "description": "Device repair ticket with assigned technician, cost, scheduled day, and live status.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "ticketNumber": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "deviceModel": { "type": "string" },
+        "issueDescription": { "type": "string" },
+        "estimatedCostEgp": { "type": "number" },
+        "partsCostEgp": { "type": "number" },
+        "paidAmountEgp": { "type": "number" },
+        "assignedTechId": { "type": "string" },
+        "assignedTechName": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "IN_PROGRESS", "READY_FOR_PICKUP", "DELIVERED"] },
+        "scheduledDateKey": { "type": "string" },
+        "createdByStaffName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "ticketNumber", "customerName", "customerPhone", "deviceModel", "issueDescription", "estimatedCostEgp", "partsCostEgp", "paidAmountEgp", "assignedTechId", "assignedTechName", "status", "scheduledDateKey", "createdByStaffName", "createdAt", "updatedAt"]
+    },
+    "DebtRecord": {
+      "title": "DebtRecord",
+      "description": "Receivable (Owed to Us) or Payable (We Owe) ledger entry.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "direction": { "type": "string", "enum": ["RECEIVABLE", "PAYABLE"] },
+        "partyName": { "type": "string" },
+        "phone": { "type": "string" },
+        "description": { "type": "string" },
+        "originalAmountEgp": { "type": "number" },
+        "remainingAmountEgp": { "type": "number" },
+        "dueDateMillis": { "type": "integer" },
+        "status": { "type": "string", "enum": ["OPEN", "PARTIAL", "SETTLED"] },
+        "sourceSaleId": { "type": "string" },
+        "createdByStaffName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "direction", "partyName", "phone", "description", "originalAmountEgp", "remainingAmountEgp", "dueDateMillis", "status", "createdByStaffName", "createdAt", "updatedAt"]
+    },
+    "DebtPayment": {
+      "title": "DebtPayment",
+      "description": "Installment or settlement cash-flow record linked to a DebtRecord.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "debtId": { "type": "string" },
+        "direction": { "type": "string", "enum": ["RECEIVABLE", "PAYABLE"] },
+        "partyName": { "type": "string" },
+        "amountEgp": { "type": "number" },
+        "staffId": { "type": "string" },
+        "staffName": { "type": "string" },
+        "note": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "debtId", "direction", "partyName", "amountEgp", "staffId", "staffName", "note", "createdAt"]
+    },
+    "ExpenseEntry": {
+      "title": "ExpenseEntry",
+      "description": "Store operating expense deducted from gross margin for net profit.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "amountEgp": { "type": "number" },
+        "staffId": { "type": "string" },
+        "staffName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "title", "category", "amountEgp", "staffId", "staffName", "createdAt"]
+    },
+    "ActivityLogEntry": {
+      "title": "ActivityLogEntry",
+      "description": "Real-time employee audit log entry across all 4 devices.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "staffId": { "type": "string" },
+        "staffName": { "type": "string" },
+        "staffRole": { "type": "string", "enum": ["ADMIN", "STAFF"] },
+        "actionType": { "type": "string" },
+        "summary": { "type": "string" },
+        "amountEgp": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["storeId", "memberUids", "staffId", "staffName", "staffRole", "actionType", "summary", "amountEgp", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserWorkspaceLink" },
+      "description": "Authenticated user's active store workspace link."
+    },
+    "/store_invites/{joinCode}": {
+      "schema": { "$ref": "#/entities/StoreInvite" },
+      "description": "Join code lookup for adding staff devices to an existing store."
+    },
+    "/stores/{storeId}": {
+      "schema": { "$ref": "#/entities/StoreWorkspace" },
+      "description": "Root store workspace configuration and device membership."
+    },
+    "/stores/{storeId}/staff/{staffId}": {
+      "schema": { "$ref": "#/entities/StaffMember" },
+      "description": "4 active staff profiles (Owner Admin + 3 Staff)."
+    },
+    "/stores/{storeId}/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "POS catalog inventory items."
+    },
+    "/stores/{storeId}/sales/{saleId}": {
+      "schema": { "$ref": "#/entities/SaleTransaction" },
+      "description": "Logged POS sales transactions."
+    },
+    "/stores/{storeId}/repairs/{repairId}": {
+      "schema": { "$ref": "#/entities/RepairTicket" },
+      "description": "Device repair queue tickets."
+    },
+    "/stores/{storeId}/debts/{debtId}": {
+      "schema": { "$ref": "#/entities/DebtRecord" },
+      "description": "Receivables (Owed to Us) and Payables (We Owe) ledger records."
+    },
+    "/stores/{storeId}/debt_payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/DebtPayment" },
+      "description": "Partial/full debt installment payment cash-flow history."
+    },
+    "/stores/{storeId}/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/ExpenseEntry" },
+      "description": "Operating expenses for net profit calculation."
+    },
+    "/stores/{storeId}/activity_logs/{logId}": {
+      "schema": { "$ref": "#/entities/ActivityLogEntry" },
+      "description": "Real-time team action audit trail."
+    }
+  }
+}

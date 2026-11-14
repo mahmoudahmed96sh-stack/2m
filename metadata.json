@@ -1,0 +1,6 @@
+{
+  "name": "2m Store",
+  "description": "نظام إدارة متجر 2m — نقطة بيع، متابعة أرباح، جدول صيانة يومي، ودفتر ديون لحظي لـ 4 أجهزة",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
